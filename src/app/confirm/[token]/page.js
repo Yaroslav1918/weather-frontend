@@ -7,7 +7,7 @@ const ConfirmPage = () => {
   const router = useRouter();
   const params = useParams();
   const [status, setStatus] = useState("loading"); // loading, success, error
-  const BASE_URL = "http://localhost:3001";
+  const BASE_URL = "https://weather-api-hdfv.onrender.com";
   useEffect(() => {
     const token = params.token;
 
