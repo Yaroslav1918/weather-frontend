@@ -36,7 +36,7 @@ function App() {
   };
 
   const subscribe = async () => {
-    setLoading
+    setLoading(true);
     try {
       const res = await axios.post(`${BASE_URL}/api/subscribe`, {
         email,
