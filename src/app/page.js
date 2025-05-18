@@ -2,11 +2,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const BASE_URL = "http://localhost:3001";
+const BASE_URL = "https://weather-api-hdfv.onrender.com";
 
 function App() {
   const [city, setCity] = useState("");
   const [citySubscribed, setCitySubscribed] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const [weather, setWeather] = useState(null);
   const [email, setEmail] = useState("");
   const [frequency, setFrequency] = useState("daily");
@@ -21,16 +23,20 @@ function App() {
     setIsSubscribed(isSubscribed);
   }, []);
   const getWeather = async () => {
+    setLoading(true);
     try {
       const res = await axios.get(`${BASE_URL}/api/weather?city=${city}`);
       setWeather(res.data);
     } catch (err) {
       setMessage("City not found or error fetching weather.");
       setWeather(null);
+    } finally {
+      setLoading(false);
     }
   };
 
   const subscribe = async () => {
+    setLoading
     try {
       const res = await axios.post(`${BASE_URL}/api/subscribe`, {
         email,
@@ -42,10 +48,13 @@ function App() {
       setEmail("");
     } catch (err) {
       setMessage(err.response?.data?.error || "Subscription failed.");
+    } finally {
+      setLoading(false);
     }
   };
 
   const unsubscribe = async () => {
+    setLoading
     try {
       const res = await axios.get(`${BASE_URL}/api/unsubscribe/${token}`);
       setMessage(res.data.message);
@@ -55,6 +64,8 @@ function App() {
       setIsSubscribed(false);
     } catch (err) {
       setMessage(err.response?.data?.error || "Unsubscription failed.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -140,6 +151,11 @@ function App() {
       {message && (
         <div className="text-center text-lg text-purple-700 font-large mt-2">
           {message}
+        </div>
+      )}
+      {loading && (
+        <div className="text-center text-lg text-blue-500 font-medium mt-2">
+          Loading...
         </div>
       )}
     </div>
